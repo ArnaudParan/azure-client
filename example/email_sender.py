@@ -2,6 +2,7 @@
 basic example which creates email drafts
 """
 
+import base64
 import logging.config
 import os
 from pathlib import Path
@@ -14,7 +15,7 @@ LOGGING = {
     'formatters': {
         'detailed': {
             'class': 'logging.Formatter',
-            'format': '%(asctime)s %(name)-15s %(levelname)-8s %(processName)-10s %(message)s'
+            'format': '%(asctime)s %(name)s:%(lineno)d %(levelname)-8s %(processName)-10s %(message)s'
             }
         },
     'handlers': {
@@ -26,6 +27,10 @@ LOGGING = {
         },
     'loggers': {
         'azure_client': {
+            'level': 'DEBUG',
+            'handlers': ['console']
+            },
+        '__main__': {
             'level': 'DEBUG',
             'handlers': ['console']
             }
@@ -48,4 +53,10 @@ SUBJECT = 'test outlook rest api'
 BODY = 'This is a <p>Test</p>.'
 ADDRESSES = ['test@domain.com']
 USER_ID = 'me'
-create_draft(AUTH, SUBJECT, BODY, ADDRESSES, USER_ID)
+
+EMAIL_ID = create_draft(AUTH, SUBJECT, BODY, ADDRESSES, USER_ID)
+
+NAME = "attachment.tsv"
+with open('example/data/attachment.tsv', 'rb') as f:
+    CONTENT_BYTES = base64.b64encode(f.read()).decode('utf8')
+    create_draft(AUTH, SUBJECT, BODY, ADDRESSES, USER_ID, [{"Name": NAME, "ContentBytes": CONTENT_BYTES, "@odata.type": "#Microsoft.OutlookServices.FileAttachment"}])

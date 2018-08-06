@@ -2,13 +2,14 @@
 Module which handles the outlook email REST API
 """
 
+import logging
 import json
 import urllib.request
 import urllib.error
 from azure_client.exceptions import AzureError
 
 
-def create_draft(auth, subject, body, addresses, user_id):
+def create_draft(auth, subject, body, addresses, user_id, attachments_list=None):
     """
     this functions creates a draft with the email data given
     the user id should be either 'me', either 'users/email@domain.com'
@@ -17,11 +18,13 @@ def create_draft(auth, subject, body, addresses, user_id):
     for more
     """
     data = {}
-    data['subject'] = subject
-    data['body'] = {}
-    data['body']['contentType'] = 'HTML'
-    data['body']['content'] = body
-    data['toRecipients'] = [{'emailAddress': {'address': addr}} for addr in addresses]
+    data['Subject'] = subject
+    data['Body'] = {}
+    data['Body']['ContentType'] = 'HTML'
+    data['Body']['Content'] = body
+    data['ToRecipients'] = [{'EmailAddress': {'Address': addr}} for addr in addresses]
+    if attachments_list is not None:
+        data['Attachments'] = attachments_list
 
     params = json.dumps(data).encode('utf8')
 
@@ -33,6 +36,11 @@ def create_draft(auth, subject, body, addresses, user_id):
         }
     req = urllib.request.Request(url, params, headers)
     try:
-        urllib.request.urlopen(req)
+        resp = urllib.request.urlopen(req)
+        resp_data = json.load(resp)
+
+        logging.getLogger(__name__).info("Draft created")
+
+        return resp_data['id']
     except urllib.error.HTTPError as err:
         raise AzureError(err)
