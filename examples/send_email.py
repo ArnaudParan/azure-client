@@ -19,5 +19,5 @@ if __name__ == "__main__":
     email_id = None
     if email_id is None:
         raise RuntimeError('Please set the value of email_id')
-    print(send_email(auth, "me", email_id))
+    send_email(auth, "me", email_id)
 

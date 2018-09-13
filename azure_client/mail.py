@@ -114,9 +114,7 @@ def send_email(auth, user_id, message_id):
 
     req = urllib.request.Request(url, headers=headers, method="POST")
     try:
-        resp = urllib.request.urlopen(req)
-        resp_data = json.load(resp)
-
+        urllib.request.urlopen(req)
         logging.getLogger(__name__).info("Message sent")
     except urllib.error.HTTPError as err:
         raise AzureError(err)
