@@ -1,0 +1,6 @@
+{
+  "subject": "test azure auth",
+  "body": "This is a <b>Test</b>",
+  "addresses": ["test@domain.com"],
+  "user_id": "me"
+}

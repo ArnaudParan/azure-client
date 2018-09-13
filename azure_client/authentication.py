@@ -14,6 +14,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from azure_client.exceptions import AzureError
 
 
+LOGIN_URL = "https://login.microsoftonline.com"
+
 @contextmanager
 def web_driver(driver_generator):
     """
@@ -139,7 +141,7 @@ class AzureAuth:
         """
         gets the authorization code to start the oauth process
         """
-        authorize_url = "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/authorize".format(tenant=tenant)  # pylint: disable=line-too-long
+        authorize_url = "{login_url}/{tenant}/oauth2/v2.0/authorize".format(login_url=LOGIN_URL, tenant=tenant)  # pylint: disable=line-too-long
 
         code = None
 
@@ -161,7 +163,7 @@ class AzureAuth:
         """
         gets access token from authentification code
         """
-        token_url = "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token".format(tenant=tenant)  # pylint: disable=line-too-long
+        token_url = "{login_url}/{tenant}/oauth2/v2.0/token".format(login_url=LOGIN_URL, tenant=tenant)  # pylint: disable=line-too-long
         data = {
             "client_id": client_id,
             "client_secret": client_secret,
@@ -188,7 +190,7 @@ class AzureAuth:
         """
         refresh an access token using a refresh token
         """
-        token_url = "https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token".format(tenant=tenant)  # pylint: disable=line-too-long
+        token_url = "{login_url}/{tenant}/oauth2/v2.0/token".format(login_url=LOGIN_URL, tenant=tenant)  # pylint: disable=line-too-long
         data = {
             "client_id": client_id,
             "client_secret": client_secret,

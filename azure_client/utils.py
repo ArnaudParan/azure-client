@@ -5,7 +5,7 @@ some utils functions
 import os
 from pathlib import Path
 from selenium import webdriver
-from azure_client.azure_client import AzureAuth
+from azure_client.authentication import AzureAuth
 
 
 AZURE_AUTH_DIRECTORY = os.path.join(Path.home(), '.azure_auth')
