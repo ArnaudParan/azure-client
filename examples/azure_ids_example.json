@@ -1,0 +1,8 @@
+{
+  "client_id": "your-client-id",
+  "private_key": "YourPrivateKey",
+  "scope": ["your", "scopes", "mail.send"],
+  "tenant": "your.tenant",
+  "redirect_uri": "https://redirect.uri/",
+  "filename": "creds_filename.json"
+}
