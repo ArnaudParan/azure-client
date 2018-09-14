@@ -12,23 +12,19 @@ from selenium import webdriver
 import imports_resolver
 from azure_client import create_draft, get_or_create_credentials
 
-from settings import LOGGING
+from settings import LOGGING, get_cred_data
 
 
 if __name__ == "__main__":
     logging.config.dictConfig(LOGGING)
-
-    try:
-        with open('examples/azure_ids.json', 'r') as f:
-            cred_data = json.load(f)
-    except FileNotFoundError as err:
-        warnings.warn("Please create an azure_ids.json before trying this example", ResourceWarning)
-        raise err
-
+    cred_data = get_cred_data()
     auth = get_or_create_credentials(**cred_data)
 
     with open('examples/test_email.json', 'r') as f:
         email_data = json.load(f)
+
+    for _ in range(100):
+        create_draft(auth, **email_data)
 
     EMAIL_ID = create_draft(auth, **email_data)
 

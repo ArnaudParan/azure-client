@@ -4,16 +4,13 @@ import json
 import imports_resolver
 from azure_client import get_or_create_credentials, get_emails
 
-from settings import LOGGING
+from settings import LOGGING, get_cred_data
 
 logging.config.dictConfig(LOGGING)
 
 if __name__ == "__main__":
-    try:
-        with open('examples/azure_ids.json', 'r') as f:
-            cred_data = json.load(f)
-    except FileNotFoundError as err:
-        logging.getLogger(__name__).error("Please create an azure_ids.json before trying this example")
-        raise err
+    cred_data = get_cred_data()
     auth = get_or_create_credentials(**cred_data)
-    print(get_emails(auth, "me", "Drafts", ["id"]))
+    emails = get_emails(auth, "me", "Drafts", select="id")
+    print('Number of emails: {}'.format(len(emails)))
+    print(emails)
