@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name = "azure_client",
     packages = ["azure_client"],
-    version = "1.0.10",
+    version = "1.0.11",
     description = "Library which handles the microsoft Azure REST API",
     author = "Arnaud Paran",
     author_email = "paran.arnaud@gmail.com",
