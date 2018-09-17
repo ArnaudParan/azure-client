@@ -6,6 +6,7 @@ import logging
 import json
 import urllib.request
 import urllib.error
+from urllib.parse import urlencode
 from azure_client.exceptions import AzureError
 
 
@@ -86,17 +87,13 @@ def get_emails(auth, user_id, folder_id='AllItems', **kwargs):
             https://docs.microsoft.com/en-us/previous-versions/office/office-365-api/api/version-2.0/complex-types-for-mail-contacts-calendar#Count
     """
 
-    parameters = []
-    for key, item in kwargs.items():
-        if isinstance(item, bool) and item != False:
-            parameters.append("${key}".format(key=key))
-        else:
-            parameters.append("${key}={item}".format(key=key, item=item))
+    kwargs = {"$" + key: item for (key, item) in kwargs.items() if item != False}
+
     url = "{api_url}/{user_id}/MailFolders/{folder_id}/messages?{params}".format(
         api_url=API_URL,
         user_id=user_id,
         folder_id=folder_id,
-        params='&'.join(parameters))
+        params=urlencode(kwargs).replace("=True", ""))
 
     headers = {
         'Content-Type': 'application/json',
